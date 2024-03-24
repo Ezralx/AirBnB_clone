@@ -6,6 +6,7 @@ serialize instances to a JSON file and deserialize JSON file to instances
 
 """
 import json
+import os
 
 from models.amenity import Amenity
 from models.base_model import BaseModel
@@ -19,12 +20,16 @@ from models.user import User
 class FileStorage:
     """This class saves and manages the data using a JSON file"""
 
-    __file_path = "hbnb.json"
+    __file_path = "file.json"
     __objects = {}
 
     def all(self):
         """Returns the dictionary of objects"""
         return FileStorage.__objects
+
+    def file(self):
+        """Returns the file path"""
+        return self.__file_path
 
     def new(self, obj):
         """Add `obj` to the dictionary of objects with key <class name>.id"""
@@ -52,3 +57,8 @@ class FileStorage:
                 key: eval("{}(**{})".format(o_dict["__class__"], o_dict))
                 for key, o_dict in json_obj_dict.items()
             }
+
+    def delete(self, class_name, id):
+        """Deletes an instance with a given class name and id"""
+        key = class_name + "." + id
+        del FileStorage.__objects[key]
